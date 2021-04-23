@@ -1,23 +1,91 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/src/models/news_models.dart';
+import 'package:news_app/src/services/news_service.dart';
 import 'package:news_app/src/theme/theme.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class NewsList extends StatelessWidget {
-  final List<Article> news;
+class NewsList extends StatefulWidget {
+  List<Article> news;
 
-  const NewsList(this.news);
+  NewsList(this.news);
+
+  @override
+  _NewsListState createState() => _NewsListState();
+}
+
+class _NewsListState extends State<NewsList> {
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: this.news.length,
-      itemBuilder: (BuildContext context, int index) {
-        return _Report(
-          report: this.news[index],
-          index: index,
-        );
-      },
+    final newsService = Provider.of<NewsService>(context);
+
+    void _onRefresh() async {
+      // monitor network fetch
+      await Future.delayed(Duration(milliseconds: 1000));
+      // if failed,use refreshFailed()
+      print('entro a onRefresh');
+      newsService.getTopHeadlines();
+      //busca nuevas noticias
+      if (newsService.headlines == this.widget.news) {
+        _refreshController.refreshFailed();
+        print('Entró a iguales on refresh');
+        newsService.headlines = [];
+      } else {
+        setState(() {});
+        _refreshController.refreshCompleted();
+      }
+    }
+
+    void _onLoading() async {
+      // monitor network fetch
+      await Future.delayed(Duration(milliseconds: 1000));
+
+      print('entro a onloading');
+      newsService.getTopHeadlines();
+      //busca nuevas noticias
+      if (newsService.headlines == this.widget.news) {
+        _refreshController.loadNoData();
+        print('Entró a iguales');
+        newsService.headlines = [];
+      } else {
+        setState(() {});
+        _refreshController.loadComplete();
+      }
+
+      // if failed,use loadFailed(),if no data return,use LoadNodata()
+    }
+
+    return SmartRefresher(
+      enablePullDown: true,
+      enablePullUp: true,
+      header: WaterDropMaterialHeader(),
+      footer: ClassicFooter(
+        iconPos: IconPosition.top,
+        outerBuilder: (child) {
+          return Container(
+            width: 80.0,
+            child: Center(
+              child: child,
+            ),
+          );
+        },
+      ),
+      controller: _refreshController,
+      onRefresh: _onRefresh,
+      onLoading: _onLoading,
+      child: ListView.builder(
+        itemCount: this.widget.news.length,
+        itemBuilder: (BuildContext context, int index) {
+          return _Report(
+            report: this.widget.news[index],
+            index: index,
+          );
+        },
+      ),
     );
   }
 }
