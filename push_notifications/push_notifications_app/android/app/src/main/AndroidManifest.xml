@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.danielnovillo.pushapp">
    <application
+        android:name=".Application"
         android:label="push_notifications_app"
         android:icon="@mipmap/ic_launcher">
         <activity
