@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/src/pages/tab1_page.dart';
+import 'package:news_app/src/pages/tab2_page.dart';
 import 'package:news_app/src/services/news_service.dart';
 import 'package:provider/provider.dart';
 
@@ -27,12 +28,12 @@ class _Navigation extends StatelessWidget {
       onTap: (i) => navigationModel.actualPage = i,
       items: [
         BottomNavigationBarItem(
-          icon: Icon(Icons.person_outline),
-          label: 'Page 1',
+          icon: Icon(Icons.history_outlined),
+          label: 'Recents',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.public_outlined),
-          label: 'Page 2',
+          label: 'Categories',
         ),
       ],
     );
@@ -50,9 +51,7 @@ class _Pages extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(),
       children: [
         Tab1Page(),
-        Container(
-          color: Colors.green,
-        ),
+        Tab2Page(),
       ],
     );
   }
