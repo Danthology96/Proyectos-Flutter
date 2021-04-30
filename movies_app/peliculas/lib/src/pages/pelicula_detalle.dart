@@ -125,6 +125,7 @@ class PeliculaDetalle extends StatelessWidget {
           Text(
             pelicula.overview,
             textAlign: TextAlign.justify,
+            style: TextStyle(fontSize: 15),
           ),
         ],
       ),

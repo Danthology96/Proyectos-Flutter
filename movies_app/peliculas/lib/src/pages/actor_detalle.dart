@@ -80,7 +80,7 @@ class ActorDetalle extends StatelessWidget {
           Text(
             biografia,
             textAlign: TextAlign.justify,
-            style: Theme.of(context).textTheme.bodyText2,
+            style: TextStyle(fontSize: 15),
           ),
           SizedBox(
             height: 20.0,
