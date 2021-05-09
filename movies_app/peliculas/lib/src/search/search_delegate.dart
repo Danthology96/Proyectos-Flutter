@@ -7,7 +7,7 @@ class DataSearch extends SearchDelegate {
   final peliculasProvider = new PeliculasProvider();
   @override
   List<Widget> buildActions(BuildContext context) {
-    // TODO: Son las acciones de nuestro appbar
+    // Son las acciones de nuestro appbar
     return [
       IconButton(
         icon: Icon(Icons.clear),
@@ -20,7 +20,7 @@ class DataSearch extends SearchDelegate {
 
   @override
   Widget buildLeading(BuildContext context) {
-    // TODO: Ícono a la izquierda del appbar
+    // Ícono a la izquierda del appbar
     return IconButton(
       icon: AnimatedIcon(
         icon: AnimatedIcons.menu_arrow,
@@ -34,7 +34,7 @@ class DataSearch extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    // TODO: El builder o la instrucción que crea los resultados
+    // El builder o la instrucción que crea los resultados
     //a mostrar
     return Center(
       child: Container(
@@ -48,7 +48,7 @@ class DataSearch extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // TODO: Las sugerencias que aparecen cuando la persona escribe
+    // Las sugerencias que aparecen cuando la persona escribe
     if (query.isEmpty) {
       return Container();
     }
@@ -57,7 +57,7 @@ class DataSearch extends SearchDelegate {
       future: peliculasProvider.buscarPelicula(query),
       builder: (BuildContext context, AsyncSnapshot<List<Pelicula>> snapshot) {
         if (snapshot.hasData) {
-          final peliculas = snapshot.data;
+          final peliculas = snapshot.data!;
           return ListView(
             children: peliculas.map((pelicula) {
               return ListTile(
@@ -67,11 +67,10 @@ class DataSearch extends SearchDelegate {
                   width: 50.0,
                   fit: BoxFit.contain,
                 ),
-                title: Text(pelicula.title),
-                subtitle: Text(pelicula.originalTitle),
+                title: Text(pelicula.title!),
+                subtitle: Text(pelicula.originalTitle!),
                 onTap: () {
                   close(context, null);
-                  pelicula.uniqueId = '';
                   Navigator.pushNamed(context, 'detalle', arguments: pelicula);
                 },
               );

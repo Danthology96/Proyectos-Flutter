@@ -83,7 +83,8 @@ class PeliculasProvider {
     final resp = await http.get(url);
     final decodedData = json.decode(resp.body);
     final persona = new Persona.fromJsonMap(decodedData);
-    return await persona;
+    //TODO: aquí después del return estaba "await", si se daña agregarle
+    return persona;
   }
 
   Future<List<Pelicula>> buscarPelicula(String query) async {

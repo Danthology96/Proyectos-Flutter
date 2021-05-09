@@ -1,53 +1,56 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:peliculas/src/models/pelicula_model.dart';
 
 class CardSwiper extends StatelessWidget {
   final List<Pelicula> peliculas;
 
-  CardSwiper({@required this.peliculas});
+  CardSwiper({required this.peliculas});
 
   @override
   Widget build(BuildContext context) {
-    final _screenSize = MediaQuery.of(context).size;
+    // peliculas![index].uniqueId = '${peliculas![index].id}-tarjeta';
+    //
+    //
+    return CarouselSlider.builder(
+      itemCount: this.peliculas.length,
+      itemBuilder: (context, index, realIndex) =>
+          _MoviePosterImage(pelicula: this.peliculas[index]),
+      options: CarouselOptions(
+        autoPlay: true,
+        aspectRatio: 2.0,
+        enlargeCenterPage: true,
+      ),
+    );
+  }
+}
 
-    return Container(
-      padding: EdgeInsets.only(top: 10.0),
-      child: Swiper(
-        //70% del ancho
-        itemWidth: _screenSize.width * 0.7,
-        itemHeight: _screenSize.height * 0.5,
-        layout: SwiperLayout.STACK,
-        itemBuilder: (BuildContext context, int index) {
-          peliculas[index].uniqueId = '${peliculas[index].id}-tarjeta';
-          return Hero(
-            tag: peliculas[index].uniqueId,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20.0),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    'detalle',
-                    arguments: peliculas[index],
-                  );
-                },
-                child: FadeInImage(
-                  placeholder: AssetImage('assets/img/no-image.jpg'),
-                  fit: BoxFit.cover,
-                  image: NetworkImage(
-                    peliculas[index].getPosterImg(),
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-        itemCount: peliculas.length,
-        //para que salgan los puntitos del carrusel
-        //pagination: new SwiperPagination(),
-        //para que salgan flechas laterales
-        //control: new SwiperControl(),
+class _MoviePosterImage extends StatelessWidget {
+  const _MoviePosterImage({
+    Key? key,
+    required this.pelicula,
+  }) : super(key: key);
+
+  final Pelicula pelicula;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          'detalle',
+          arguments: pelicula,
+        );
+      },
+      child: Hero(
+        tag: pelicula.uniqueIdBanner,
+        child: FadeInImage(
+          placeholder: AssetImage('assets/img/loading.gif'),
+          fit: BoxFit.cover,
+          // image: NetworkImage(pelicula.getPosterImg()),
+          image: NetworkImage(pelicula.getBackgroundImg()),
+        ),
       ),
     );
   }

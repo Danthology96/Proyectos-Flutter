@@ -7,17 +7,17 @@ class ActorDetalle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final peliculaProvider = new PeliculasProvider();
-    final Actor actor = ModalRoute.of(context).settings.arguments;
+    final Actor actor = ModalRoute.of(context)!.settings.arguments as Actor;
     print('Actorid' + actor.id.toString());
     return Scaffold(
       appBar: AppBar(
-        title: Text(actor.name),
+        title: Text(actor.name!),
       ),
       body: FutureBuilder(
         future: peliculaProvider.getPersona(actor.id.toString()),
         builder: (BuildContext context, AsyncSnapshot<Persona> snapshot) {
           if (snapshot.hasData) {
-            Persona persona = snapshot.data;
+            Persona persona = snapshot.data!;
             return Container(
               child: SingleChildScrollView(
                 child: Column(
@@ -39,17 +39,17 @@ class ActorDetalle extends StatelessWidget {
   }
 
   Widget _descripcion(BuildContext context, Persona persona) {
-    String biografia;
+    String? biografia;
     String nacimiento = '';
     persona.biography == ''
         ? biografia = 'No existe biografía.'
         : biografia = persona.biography;
     persona.birthday == null
         ? nacimiento = nacimiento + 'Sin fecha. '
-        : nacimiento = nacimiento + persona.birthday + '.';
+        : nacimiento = nacimiento + persona.birthday! + '.';
     persona.placeOfBirth == null
         ? nacimiento = nacimiento + 'Lugar de nacimiento no registrado.'
-        : nacimiento = nacimiento + persona.placeOfBirth + '.';
+        : nacimiento = nacimiento + persona.placeOfBirth! + '.';
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -78,9 +78,9 @@ class ActorDetalle extends StatelessWidget {
             height: 10.0,
           ),
           Text(
-            biografia,
+            biografia!,
             textAlign: TextAlign.justify,
-            style: TextStyle(fontSize: 15),
+            style: Theme.of(context).textTheme.bodyText2,
           ),
           SizedBox(
             height: 20.0,
@@ -100,7 +100,7 @@ class ActorDetalle extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Hero(
-            tag: persona.id,
+            tag: persona.id!,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20.0),
               child: FadeInImage(
@@ -120,7 +120,7 @@ class ActorDetalle extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  persona.name,
+                  persona.name!,
                   style: Theme.of(context).textTheme.headline5,
                   overflow: TextOverflow.ellipsis,
                 ),

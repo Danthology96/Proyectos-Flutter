@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peliculas/src/models/pelicula_model.dart';
 import 'package:peliculas/src/models/providers/peliculas_provider.dart';
 import 'package:peliculas/src/search/search_delegate.dart';
 import 'package:peliculas/src/widgets/card_swiper_widget.dart';
@@ -28,20 +29,12 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: Container(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              SizedBox(
-                height: 10,
-              ),
-              _swipeTarjetas(),
-              SizedBox(
-                height: 20,
-              ),
-              _footer(context),
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            _swipeTarjetas(),
+            _footer(context),
+          ],
         ),
       ),
     );
@@ -52,11 +45,11 @@ class HomePage extends StatelessWidget {
       future: peliculasProvider.getEnCines(),
       builder: (
         BuildContext context,
-        AsyncSnapshot<List<dynamic>> snapshot,
+        AsyncSnapshot<List<Pelicula>> snapshot,
       ) {
         if (snapshot.hasData) {
           return CardSwiper(
-            peliculas: snapshot.data,
+            peliculas: snapshot.data!,
           );
         } else {
           return Container(
@@ -91,7 +84,7 @@ class HomePage extends StatelessWidget {
             builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
               if (snapshot.hasData) {
                 return MovieHorizontal(
-                  peliculas: snapshot.data,
+                  peliculas: snapshot.data as List<Pelicula>?,
                   siguientePagina: peliculasProvider.getPopulares,
                 );
               }
